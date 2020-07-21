@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.opengl.Visibility
 import android.os.Parcel
 import android.os.Parcelable
+import android.view.Gravity
 import android.view.View
 import androidx.annotation.DrawableRes
 import kotlinx.android.parcel.IgnoredOnParcel
@@ -38,7 +39,9 @@ class ShowcaseModel(
     val radiusFocusArea: Float = 0.toFloat(),
     val rect: Rect? = null,
     val type: ShowcaseType = ShowcaseType.CIRCLE,
-    val gradientFocusEnabled: Boolean = false
+    val gradientFocusEnabled: Boolean = false,
+    val descriptionGravity: Int = Gravity.RIGHT,
+    val useGravity: Boolean = false
 ) : Parcelable {
     @IgnoredOnParcel
     var isBtnNextSelected: Boolean = false

@@ -8,8 +8,10 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.view.GravityCompat
 
 import java.util.ArrayList
 import kotlin.math.pow
@@ -107,6 +109,8 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var marginFocusArea: Int = 0
         private var type: ShowcaseType = ShowcaseType.CIRCLE
         private var gradientFocusEnabled: Boolean = false
+        private var descriptionGravity: Int = Gravity.RIGHT;
+        private var useGravity: Boolean = false;
 
         init {
             showcaseModelList = ArrayList()
@@ -246,6 +250,16 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             return this
         }
 
+        fun setGravity(gravity: Int): Builder {
+            this.descriptionGravity = gravity;
+            return this;
+        }
+
+        fun useGravity(enabled: Boolean): Builder {
+            this.useGravity = enabled;
+            return this;
+        }
+
         fun add(): Builder {
             this.showcaseModelList.add(createShowcaseModel())
             return this
@@ -289,7 +303,9 @@ class ShowcaseManager private constructor(private val builder: Builder) {
                 radiusFocusArea = circleCenterRadius,
                 rect = rect,
                 type = type,
-                gradientFocusEnabled = gradientFocusEnabled
+                gradientFocusEnabled = gradientFocusEnabled,
+                descriptionGravity = descriptionGravity,
+                useGravity = useGravity
             )
 
         }

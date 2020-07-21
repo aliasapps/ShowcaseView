@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import android.util.AttributeSet
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.security.InvalidParameterException
 
 /**
  * Created by erkut.aras on 23.02.2018.
@@ -44,6 +46,9 @@ open class ShowcaseView : RelativeLayout {
     private var rect: Rect = Rect()
     private var type: ShowcaseType = ShowcaseType.CIRCLE
     private var gradientFocusEnabled: Boolean = false
+
+    private var descriptionGravity: Int = Gravity.RIGHT
+    private var useGravity: Boolean = false
 
     constructor(context: Context) : super(context) {
         init()
@@ -128,6 +133,9 @@ open class ShowcaseView : RelativeLayout {
         rect = showcaseModel.rect ?: Rect()
         type = showcaseModel.type
         gradientFocusEnabled = showcaseModel.gradientFocusEnabled
+
+        descriptionGravity = showcaseModel.descriptionGravity;
+        useGravity = showcaseModel.useGravity;
     }
 
     /**
@@ -428,16 +436,39 @@ open class ShowcaseView : RelativeLayout {
             colorFocusArea, if (gradientFocusEnabled) shadowPaint.color else colorFocusArea, Shader.TileMode.CLAMP)
         drawFocusArea(shadowPaint, canvas)
 
-        // descriptionView relocate related to focusArea
-        val topMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_TOP_MARGIN_IN_DP.toFloat())
-        val bottomMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_BOTTOM_MARGIN_IN_DP.toFloat())
-        val topFocusArea = cyFocusArea - radiusFocusArea
-        val bottomFocusArea = cyFocusArea + radiusFocusArea
-        yDescView = if (topFocusArea >= descriptionView.height + topMarginFocusArea) {
-            (topFocusArea - topMarginFocusArea - descriptionView.height.toFloat()).toInt()
+        if (useGravity) {
+            when (descriptionGravity) {
+                Gravity.END -> {
+                    xDescView = (cxFocusArea + radiusFocusArea).toInt();
+                    yDescView = (cyFocusArea - descriptionView.height / 2).toInt();
+                }
+                Gravity.BOTTOM -> {
+                    xDescView = (cxFocusArea - descriptionView.width / 2).toInt();
+                    yDescView = (cyFocusArea + radiusFocusArea + descriptionView.height + FOCUS_AREA_BOTTOM_MARGIN_IN_DP).toInt();
+                }
+                Gravity.START -> {
+                    xDescView = (cxFocusArea - radiusFocusArea - descriptionView.width).toInt();
+                    yDescView = (cyFocusArea - descriptionView.height / 2).toInt();
+                }
+                Gravity.TOP -> {
+                    xDescView = (cxFocusArea - descriptionView.width / 2).toInt();
+                    yDescView = (cyFocusArea - radiusFocusArea - descriptionView.height - FOCUS_AREA_TOP_MARGIN_IN_DP).toInt();
+                }
+                else -> throw InvalidParameterException("Invalid gravity type used : $descriptionGravity");
+            }
         } else {
-            (bottomFocusArea + bottomMarginFocusArea).toInt()
+            // descriptionView relocate related to focusArea
+            val topMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_TOP_MARGIN_IN_DP.toFloat())
+            val bottomMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_BOTTOM_MARGIN_IN_DP.toFloat())
+            val topFocusArea = cyFocusArea - radiusFocusArea
+            val bottomFocusArea = cyFocusArea + radiusFocusArea
+            yDescView = if (topFocusArea >= descriptionView.height + topMarginFocusArea) {
+                (topFocusArea - topMarginFocusArea - descriptionView.height.toFloat()).toInt()
+            } else {
+                (bottomFocusArea + bottomMarginFocusArea).toInt()
+            }
         }
+
         descriptionView.x = xDescView.toFloat()
         descriptionView.y = yDescView.toFloat()
         super.dispatchDraw(canvas)
