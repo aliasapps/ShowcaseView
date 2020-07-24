@@ -6,10 +6,6 @@ Changes made
 | `builder.useGravity(boolean)`        |  Use gravity instead of automatically positioning the showcase description            |
 | `builder.setGravity(int)`            | Set the gravity, must be from Gravity.START,Gravity.END,Gravity.TOP,Gravity.BOTTOM    |
 
-Set showcase description to use
-```java
-
-```
 ---
 [![](https://jitpack.io/v/erkutaras/ShowcaseView.svg)](https://jitpack.io/#erkutaras/ShowcaseView)
 [![](https://img.shields.io/badge/Android%20Arsenal-ShowcaseView-brightgreen.svg)](https://android-arsenal.com/details/1/7438)
