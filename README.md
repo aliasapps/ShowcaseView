@@ -1,12 +1,10 @@
 # Android ShowcaseView
 ### (forked from https://github.com/erkutaras/ShowcaseView)
 Changes made
-### Optinal
 | Usage                                | Description                                                                           |
 | ------------------------------------ |-------------------------------------------------------------------------------------- |
 | `builder.useGravity(boolean)`        |  Use gravity instead of automatically positioning the showcase description            |
 | `builder.setGravity(int)`            | Set the gravity, must be from Gravity.START,Gravity.END,Gravity.TOP,Gravity.BOTTOM    |
-| `builder.buttonText(String)`         |  display and set text of button                                                       |
 
 Set showcase description to use
 ```java
