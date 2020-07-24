@@ -1,4 +1,18 @@
 # Android ShowcaseView
+### (forked from https://github.com/erkutaras/ShowcaseView)
+Changes made
+### Optinal
+| Usage                                | Description                                                                           |
+| ------------------------------------ |-------------------------------------------------------------------------------------- |
+| `builder.useGravity(boolean)`        |  Use gravity instead of automatically positioning the showcase description            |
+| `builder.setGravity(int)`            | Set the gravity, must be from Gravity.START,Gravity.END,Gravity.TOP,Gravity.BOTTOM    |
+| `builder.buttonText(String)`         |  display and set text of button                                                       |
+
+Set showcase description to use
+```java
+
+```
+---
 [![](https://jitpack.io/v/erkutaras/ShowcaseView.svg)](https://jitpack.io/#erkutaras/ShowcaseView)
 [![](https://img.shields.io/badge/Android%20Arsenal-ShowcaseView-brightgreen.svg)](https://android-arsenal.com/details/1/7438)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -28,7 +42,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```
 dependencies {
-    implementation 'com.github.erkutaras:ShowcaseView:1.5.0'
+    implementation 'com.github.travis575757:ShowcaseView:1.5.1'
 }
 ```
 
