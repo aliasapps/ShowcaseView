@@ -31,9 +31,12 @@ class ShowcaseModel(
     val colorDescText: Int = 0,
     val colorButtonText: Int = 0,
     val colorButtonBackground: Int = 0,
-    val colorBackground: Int = 0,
-    val alphaBackground: Int = 0,
-    val colorFocusArea: Int = 0,
+    val colorBackground: Int? = null,
+    val alphaBackground: Int? = null,
+    val colorFocusArea: Int? = null,
+//    val colorBackground: Int = 0,
+//    val alphaBackground: Int = 0,
+//    val colorFocusArea: Int = 0,
     val cxFocusArea: Float = 0.toFloat(),
     val cyFocusArea: Float = 0.toFloat(),
     val radiusFocusArea: Float = 0.toFloat(),
@@ -41,7 +44,8 @@ class ShowcaseModel(
     val type: ShowcaseType = ShowcaseType.CIRCLE,
     val gradientFocusEnabled: Boolean = false,
     val descriptionGravity: Int = Gravity.RIGHT,
-    val useGravity: Boolean = false
+    val useGravity: Boolean = false,
+    val useFocus: Boolean = false
 ) : Parcelable {
     @IgnoredOnParcel
     var isBtnNextSelected: Boolean = false

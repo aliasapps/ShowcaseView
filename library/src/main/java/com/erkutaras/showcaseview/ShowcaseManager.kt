@@ -111,6 +111,7 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var gradientFocusEnabled: Boolean = false
         private var descriptionGravity: Int = Gravity.RIGHT;
         private var useGravity: Boolean = false;
+        private var useFocus: Boolean = false;
 
         init {
             showcaseModelList = ArrayList()
@@ -260,6 +261,11 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             return this;
         }
 
+        fun useFocus(enabled: Boolean): Builder {
+            this.useFocus = enabled;
+            return this;
+        }
+
         fun add(): Builder {
             this.showcaseModelList.add(createShowcaseModel())
             return this
@@ -305,7 +311,8 @@ class ShowcaseManager private constructor(private val builder: Builder) {
                 type = type,
                 gradientFocusEnabled = gradientFocusEnabled,
                 descriptionGravity = descriptionGravity,
-                useGravity = useGravity
+                useGravity = useGravity,
+                useFocus = useFocus
             )
 
         }

@@ -49,6 +49,7 @@ open class ShowcaseView : RelativeLayout {
 
     private var descriptionGravity: Int = Gravity.RIGHT
     private var useGravity: Boolean = false
+    private var useFocus: Boolean = true
 
     constructor(context: Context) : super(context) {
         init()
@@ -118,15 +119,10 @@ open class ShowcaseView : RelativeLayout {
 
 
         // update custom view
-        if (ShowcaseUtils.isNotZero(showcaseModel.colorBackground.toFloat())) {
-            colorBackground = showcaseModel.colorBackground
-        }
-        if (ShowcaseUtils.isNotZero(showcaseModel.alphaBackground.toFloat())) {
-            alphaBackground = showcaseModel.alphaBackground
-        }
-        if (ShowcaseUtils.isNotZero(showcaseModel.colorFocusArea.toFloat())) {
-            colorFocusArea = showcaseModel.colorFocusArea
-        }
+        colorBackground = showcaseModel.colorBackground ?: Color.BLACK
+        alphaBackground = showcaseModel.alphaBackground ?: alphaBackground
+        colorFocusArea = showcaseModel.colorFocusArea ?: colorFocusArea
+
         cxFocusArea = showcaseModel.cxFocusArea
         cyFocusArea = showcaseModel.cyFocusArea
         radiusFocusArea = showcaseModel.radiusFocusArea
@@ -134,8 +130,9 @@ open class ShowcaseView : RelativeLayout {
         type = showcaseModel.type
         gradientFocusEnabled = showcaseModel.gradientFocusEnabled
 
-        descriptionGravity = showcaseModel.descriptionGravity;
-        useGravity = showcaseModel.useGravity;
+        descriptionGravity = showcaseModel.descriptionGravity
+        useGravity = showcaseModel.useGravity
+        useFocus = showcaseModel.useFocus
     }
 
     /**
@@ -420,21 +417,23 @@ open class ShowcaseView : RelativeLayout {
         paint.alpha = alphaBackground
         canvas.drawRect(rectF, paint)
 
-        // focus area
-        paint.color = colorFocusArea
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-        drawFocusArea(paint, canvas)
+        if (useFocus) {
+            // focus area
+            paint.color = colorFocusArea
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+            drawFocusArea(paint, canvas)
 
-        // shadow for focus area
-        val shadowPaint = Paint()
-        shadowPaint.color = colorBackground
-        shadowPaint.alpha = alphaBackground
-        shadowPaint.strokeWidth = 1.0f
-        shadowPaint.style = Paint.Style.FILL_AND_STROKE
-        shadowPaint.shader = Shader()
-        shadowPaint.shader = RadialGradient(cxFocusArea, cyFocusArea, radiusFocusArea,
-            colorFocusArea, if (gradientFocusEnabled) shadowPaint.color else colorFocusArea, Shader.TileMode.CLAMP)
-        drawFocusArea(shadowPaint, canvas)
+            // shadow for focus area
+            val shadowPaint = Paint()
+            shadowPaint.color = colorBackground
+            shadowPaint.alpha = alphaBackground
+            shadowPaint.strokeWidth = 1.0f
+            shadowPaint.style = Paint.Style.FILL_AND_STROKE
+            shadowPaint.shader = Shader()
+            shadowPaint.shader = RadialGradient(cxFocusArea, cyFocusArea, radiusFocusArea,
+                    colorFocusArea, if (gradientFocusEnabled) shadowPaint.color else colorFocusArea, Shader.TileMode.CLAMP)
+            drawFocusArea(shadowPaint, canvas)
+        }
 
         if (useGravity) {
             when (descriptionGravity) {
