@@ -119,7 +119,7 @@ open class ShowcaseView : RelativeLayout {
 
 
         // update custom view
-        colorBackground = showcaseModel.colorBackground ?: Color.BLACK
+        colorBackground = showcaseModel.colorBackground ?: colorBackground
         alphaBackground = showcaseModel.alphaBackground ?: alphaBackground
         colorFocusArea = showcaseModel.colorFocusArea ?: colorFocusArea
 
