@@ -109,9 +109,13 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var marginFocusArea: Int = 0
         private var type: ShowcaseType = ShowcaseType.CIRCLE
         private var gradientFocusEnabled: Boolean = false
-        private var descriptionGravity: Int = Gravity.RIGHT;
-        private var useGravity: Boolean = false;
-        private var useFocus: Boolean = false;
+        private var descriptionGravity: Int = Gravity.RIGHT
+        private var useGravity: Boolean = false
+        private var useFocus: Boolean = false
+        private var useViewAsFocus: Boolean = true
+        private var  circleCenterX: Float = 0.0f
+        private var  circleCenterY: Float = 0.0f
+        private var  circleCenterRadius: Float = 0.0f
 
         init {
             showcaseModelList = ArrayList()
@@ -252,18 +256,38 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         }
 
         fun setGravity(gravity: Int): Builder {
-            this.descriptionGravity = gravity;
+            this.descriptionGravity = gravity
             return this;
         }
 
         fun useGravity(enabled: Boolean): Builder {
-            this.useGravity = enabled;
+            this.useGravity = enabled
             return this;
         }
 
         fun useFocus(enabled: Boolean): Builder {
-            this.useFocus = enabled;
+            this.useFocus = enabled
             return this;
+        }
+
+        fun useViewAsFocus(enabled: Boolean): Builder {
+            this.useViewAsFocus = enabled
+            return this;
+        }
+
+        fun circleCenterX(x: Float): Builder {
+            this.circleCenterX = x
+            return this
+        }
+
+        fun circleCenterY(y: Float): Builder {
+            this.circleCenterY = y
+            return this
+        }
+
+        fun circleCenterRadius(radius: Float): Builder {
+            this.circleCenterRadius = radius
+            return this
         }
 
         fun add(): Builder {
@@ -280,10 +304,18 @@ class ShowcaseManager private constructor(private val builder: Builder) {
 
         private fun createShowcaseModel(): ShowcaseModel {
             val viewPositionRect = Rect()
-            view.getGlobalVisibleRect(viewPositionRect)
-            val circleCenterX = getCircleCenterX(viewPositionRect).toFloat()
-            val circleCenterY = getCircleCenterY(viewPositionRect)
-            val circleCenterRadius = calculateRadius(marginFocusArea)
+            if (useViewAsFocus)
+                view.getGlobalVisibleRect(viewPositionRect)
+            else
+                viewPositionRect.set(
+                        (this.circleCenterX - this.circleCenterRadius).toInt(),
+                        (this.circleCenterY - this.circleCenterRadius).toInt(),
+                        (this.circleCenterX + this.circleCenterRadius).toInt(),
+                        (this.circleCenterY + this.circleCenterRadius).toInt()
+                )
+            val circleCenterX = if (useViewAsFocus) getCircleCenterX(viewPositionRect) else this.circleCenterX
+            val circleCenterY = if (useViewAsFocus) getCircleCenterY(viewPositionRect) else this.circleCenterY
+            val circleCenterRadius = if (useViewAsFocus) calculateRadius(marginFocusArea) else this.circleCenterRadius
             val rect = calculateRect(marginFocusArea, viewPositionRect)
 
             return ShowcaseModel(
@@ -317,8 +349,8 @@ class ShowcaseManager private constructor(private val builder: Builder) {
 
         }
 
-        private fun getCircleCenterX(viewPositionRect: Rect): Int {
-            return viewPositionRect.left + view.width / 2
+        private fun getCircleCenterX(viewPositionRect: Rect): Float {
+            return (viewPositionRect.left + view.width / 2).toFloat()
         }
 
         private fun getCircleCenterY(viewPositionRect: Rect): Float {
