@@ -152,6 +152,7 @@ class ShowcaseSampleActivity : AppCompatActivity() {
                 .circleCenterX(350.0f)
                 .rectWidth(150.0f)
                 .rectHeight(50.0f)
+                .descriptionDeltaX(400.0f)
                 .add()
                 .build()
                 .show()

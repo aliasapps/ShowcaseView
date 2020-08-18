@@ -117,6 +117,8 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var  circleCenterRadius: Float = 0.0f
         private var  rectWidth: Float = 0.0f
         private var  rectHeight: Float = 0.0f
+        private var descriptionDeltaX: Float = 0.0f
+        private var descriptionDeltaY: Float = 0.0f
 
         init {
             showcaseModelList = ArrayList()
@@ -301,6 +303,16 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             return this
         }
 
+        fun descriptionDeltaX(x: Float): Builder {
+            this.descriptionDeltaX = x
+            return this
+        }
+
+        fun descriptionDeltaY(y: Float): Builder {
+            this.descriptionDeltaY = y
+            return this
+        }
+
         fun add(): Builder {
             this.showcaseModelList.add(createShowcaseModel())
             return this
@@ -364,7 +376,9 @@ class ShowcaseManager private constructor(private val builder: Builder) {
                 gradientFocusEnabled = gradientFocusEnabled,
                 descriptionGravity = descriptionGravity,
                 useGravity = useGravity,
-                useFocus = useFocus
+                useFocus = useFocus,
+                descriptionDeltaX = descriptionDeltaX,
+                descriptionDeltaY = descriptionDeltaY
             )
 
         }

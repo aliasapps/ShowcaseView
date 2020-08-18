@@ -45,7 +45,9 @@ class ShowcaseModel(
     val gradientFocusEnabled: Boolean = false,
     val descriptionGravity: Int = Gravity.RIGHT,
     val useGravity: Boolean = false,
-    val useFocus: Boolean = false
+    val useFocus: Boolean = false,
+    val descriptionDeltaX: Float = 0.toFloat(),
+    val descriptionDeltaY: Float = 0.toFloat()
 ) : Parcelable {
     @IgnoredOnParcel
     var isBtnNextSelected: Boolean = false

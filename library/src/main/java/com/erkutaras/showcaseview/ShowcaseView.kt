@@ -50,6 +50,8 @@ open class ShowcaseView : RelativeLayout {
     private var descriptionGravity: Int = Gravity.RIGHT
     private var useGravity: Boolean = false
     private var useFocus: Boolean = true
+    private var  descriptionDeltaX: Float = 0.toFloat()
+    private var  descriptionDeltaY: Float = 0.toFloat()
 
     constructor(context: Context) : super(context) {
         init()
@@ -133,6 +135,8 @@ open class ShowcaseView : RelativeLayout {
         descriptionGravity = showcaseModel.descriptionGravity
         useGravity = showcaseModel.useGravity
         useFocus = showcaseModel.useFocus
+        descriptionDeltaX = showcaseModel.descriptionDeltaX
+        descriptionDeltaY = showcaseModel.descriptionDeltaY
     }
 
     /**
@@ -468,8 +472,8 @@ open class ShowcaseView : RelativeLayout {
             }
         }
 
-        descriptionView.x = xDescView.toFloat()
-        descriptionView.y = yDescView.toFloat()
+        descriptionView.x = xDescView.toFloat() + descriptionDeltaX
+        descriptionView.y = yDescView.toFloat() + descriptionDeltaY
         super.dispatchDraw(canvas)
     }
 
