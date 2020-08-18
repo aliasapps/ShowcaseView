@@ -3,6 +3,7 @@ package com.erkutaras.showcaseview
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
 import android.os.Parcelable
@@ -61,7 +62,7 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             Log.e(TAG, "Key can not be null.")
             return true
         }
-        if (ShowcaseUtils.isNull(builder.view)) {
+        if (ShowcaseUtils.isNull(builder.viewPositionRect)) {
             Log.e(TAG, "View can not be null.")
             return true
         }
@@ -84,7 +85,7 @@ class ShowcaseManager private constructor(private val builder: Builder) {
 
     class Builder {
         internal lateinit var context: Context
-        internal lateinit var view: View
+        internal lateinit var viewPositionRect: Rect
         internal val showcaseModelList: MutableList<ShowcaseModel>
         internal lateinit var key: String
         private var descriptionImageRes: Int = 0
@@ -101,22 +102,22 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var colorDescText: Int = 0
         private var colorButtonText: Int = 0
         private var colorButtonBackground: Int = 0
-        private var colorBackground: Int = 0
-        private var alphaBackground: Int = 0
-        private var colorFocusArea: Int = 0
+        private var colorBackground: Int = Color.BLACK
+        private var alphaBackground: Int = 204
+        private var colorFocusArea: Int = Color.TRANSPARENT
         internal var isDevelopMode: Boolean = false
         private var marginFocusArea: Int = 0
         private var type: ShowcaseType = ShowcaseType.CIRCLE
         private var gradientFocusEnabled: Boolean = false
         private var descriptionGravity: Int = Gravity.RIGHT
         private var useGravity: Boolean = false
-        private var useFocus: Boolean = false
-        private var useViewAsFocus: Boolean = true
-        private var  centerX: Float = 0.0f
-        private var  centerY: Float = 0.0f
-        private var  circleCenterRadius: Float = 0.0f
-        private var  rectWidth: Float = 0.0f
-        private var  rectHeight: Float = 0.0f
+        private var useFocus: Boolean = true
+//        private var useViewAsFocus: Boolean = true
+//        private var  centerX: Float = 0.0f
+//        private var  centerY: Float = 0.0f
+//        private var  circleCenterRadius: Float = 0.0f
+//        private var  rectWidth: Float = 0.0f
+//        private var  rectHeight: Float = 0.0f
         private var descriptionDeltaX: Float = 0.0f
         private var descriptionDeltaY: Float = 0.0f
 
@@ -130,7 +131,13 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         }
 
         fun view(view: View): Builder {
-            this.view = view
+            viewPositionRect = Rect()
+            view.getGlobalVisibleRect(viewPositionRect)
+            return this
+        }
+
+        fun view(viewPositionRect: Rect): Builder {
+            this.viewPositionRect = viewPositionRect
             return this
         }
 
@@ -273,35 +280,35 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             return this;
         }
 
-        fun useViewAsFocus(enabled: Boolean): Builder {
-            this.useViewAsFocus = enabled
-            return this;
-        }
-
-        fun circleCenterX(x: Float): Builder {
-            this.centerX = x
-            return this
-        }
-
-        fun circleCenterY(y: Float): Builder {
-            this.centerY = y
-            return this
-        }
-
-        fun circleCenterRadius(radius: Float): Builder {
-            this.circleCenterRadius = radius
-            return this
-        }
-
-        fun rectWidth(width: Float): Builder {
-            this.rectWidth = width
-            return this
-        }
-
-        fun rectHeight(height: Float): Builder {
-            this.rectHeight = height
-            return this
-        }
+//        fun useViewAsFocus(enabled: Boolean): Builder {
+//            this.useViewAsFocus = enabled
+//            return this;
+//        }
+//
+//        fun circleCenterX(x: Float): Builder {
+//            this.centerX = x
+//            return this
+//        }
+//
+//        fun circleCenterY(y: Float): Builder {
+//            this.centerY = y
+//            return this
+//        }
+//
+//        fun circleCenterRadius(radius: Float): Builder {
+//            this.circleCenterRadius = radius
+//            return this
+//        }
+//
+//        fun rectWidth(width: Float): Builder {
+//            this.rectWidth = width
+//            return this
+//        }
+//
+//        fun rectHeight(height: Float): Builder {
+//            this.rectHeight = height
+//            return this
+//        }
 
         fun descriptionDeltaX(x: Float): Builder {
             this.descriptionDeltaX = x
@@ -326,28 +333,32 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         }
 
         private fun createShowcaseModel(): ShowcaseModel {
-            val viewPositionRect = Rect()
-            if (useViewAsFocus)
-                view.getGlobalVisibleRect(viewPositionRect)
-            else if (type.equals(ShowcaseType.CIRCLE)) {
-                viewPositionRect.set(
-                        (this.centerX - this.circleCenterRadius).toInt(),
-                        (this.centerY - this.circleCenterRadius).toInt(),
-                        (this.centerX + this.circleCenterRadius).toInt(),
-                        (this.centerY + this.circleCenterRadius).toInt()
-                )
-            } else if (type.equals(ShowcaseType.RECTANGLE)) {
-                viewPositionRect.set(
-                        (this.centerX - this.rectWidth / 2).toInt(),
-                        (this.centerY - this.rectHeight / 2).toInt(),
-                        (this.centerX + this.rectWidth / 2).toInt(),
-                        (this.centerY + this.rectHeight / 2).toInt()
-                )
-            }
+//            if (!useViewAsFocus) {
+//                if (type.equals(ShowcaseType.CIRCLE)) {
+//                    viewPositionRect.set(
+//                            (this.centerX - this.circleCenterRadius).toInt(),
+//                            (this.centerY - this.circleCenterRadius).toInt(),
+//                            (this.centerX + this.circleCenterRadius).toInt(),
+//                            (this.centerY + this.circleCenterRadius).toInt()
+//                    )
+//                } else if (type.equals(ShowcaseType.RECTANGLE)) {
+//                    viewPositionRect.set(
+//                            (this.centerX - this.rectWidth / 2).toInt(),
+//                            (this.centerY - this.rectHeight / 2).toInt(),
+//                            (this.centerX + this.rectWidth / 2).toInt(),
+//                            (this.centerY + this.rectHeight / 2).toInt()
+//                    )
+//                }
+//            }
+//
+//            val circleCenterX = if (useViewAsFocus) getCircleCenterX(viewPositionRect) else this.centerX
+//            val circleCenterY = if (useViewAsFocus) getCircleCenterY(viewPositionRect) else this.centerY
+//            val circleCenterRadius = if (useViewAsFocus) calculateRadius(marginFocusArea,viewPositionRect) else this.circleCenterRadius
+//            val rect = calculateRect(marginFocusArea, viewPositionRect)
 
-            val circleCenterX = if (useViewAsFocus) getCircleCenterX(viewPositionRect) else this.centerX
-            val circleCenterY = if (useViewAsFocus) getCircleCenterY(viewPositionRect) else this.centerY
-            val circleCenterRadius = if (useViewAsFocus) calculateRadius(marginFocusArea) else this.circleCenterRadius
+            val circleCenterX = getCircleCenterX(viewPositionRect)
+            val circleCenterY = getCircleCenterY(viewPositionRect)
+            val circleCenterRadius = calculateRadius(marginFocusArea,viewPositionRect)
             val rect = calculateRect(marginFocusArea, viewPositionRect)
 
             return ShowcaseModel(
@@ -384,19 +395,19 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         }
 
         private fun getCircleCenterX(viewPositionRect: Rect): Float {
-            return (viewPositionRect.left + view.width / 2).toFloat()
+            return ( (viewPositionRect.left + viewPositionRect.right) / 2.toFloat() )
         }
 
         private fun getCircleCenterY(viewPositionRect: Rect): Float {
-            return (viewPositionRect.top + view.height / 2).toFloat()
+            return ( (viewPositionRect.bottom + viewPositionRect.top) / 2.toFloat() )
         }
 
         /**
          * @return finds out smallest radius of a circle that contains target view
          */
-        private fun calculateRadius(marginFocusArea: Int): Float {
-            val x = (view.width / 2).toFloat()
-            val y = (view.height / 2).toFloat()
+        private fun calculateRadius(marginFocusArea: Int, viewPositionRect: Rect): Float {
+            val x = (viewPositionRect.right - viewPositionRect.left) / 2.toFloat()
+            val y = (viewPositionRect.top - viewPositionRect.bottom) / 2.toFloat()
             val radius = sqrt(x.toDouble().pow(2.0) + y.toDouble().pow(2.0)).toFloat()
             return radius + ShowcaseUtils.convertDpToPx(marginFocusArea.toFloat())
         }

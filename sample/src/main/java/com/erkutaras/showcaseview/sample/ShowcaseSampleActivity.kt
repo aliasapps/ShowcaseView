@@ -3,10 +3,14 @@ package com.erkutaras.showcaseview.sample
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.webkit.ValueCallback
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Switch
 import android.widget.Toast
 
@@ -23,6 +27,7 @@ class ShowcaseSampleActivity : AppCompatActivity() {
     lateinit var v1: View
     lateinit var v2: View
     lateinit var switchStatusBarVisibility: Switch
+    lateinit var webView: WebView
 
     // default display
     private var listener = { v: View ->
@@ -136,11 +141,12 @@ class ShowcaseSampleActivity : AppCompatActivity() {
                 .buttonText("DONE")
                 .key("TEST")
                 .useFocus(true)
-                .useViewAsFocus(false)
+//                .useViewAsFocus(false)
                 .circle()
-                .circleCenterX(250.0f)
-                .circleCenterY(250.0f)
-                .circleCenterRadius(25.0f)
+//                .circleCenterX(250.0f)
+//                .circleCenterY(250.0f)
+//                .circleCenterRadius(25.0f)
+                .view(Rect(200,200,300,300))
                 .developerMode(true)
                 .colorFocusArea(Color.CYAN)
                 .colorBackground(Color.BLACK)
@@ -149,9 +155,10 @@ class ShowcaseSampleActivity : AppCompatActivity() {
                 .gradientFocusEnabled(true)
                 .add()
                 .rectangle()
-                .circleCenterX(350.0f)
-                .rectWidth(150.0f)
-                .rectHeight(50.0f)
+                .view(Rect(200,200,400,300))
+//                .circleCenterX(350.0f)
+//                .rectWidth(150.0f)
+//                .rectHeight(50.0f)
                 .descriptionDeltaX(400.0f)
                 .add()
                 .build()
@@ -209,6 +216,22 @@ class ShowcaseSampleActivity : AppCompatActivity() {
         v1.setOnClickListener(listener5)
         v2 = findViewById(R.id.radioButton)
         v2.setOnClickListener(listener5)
+
+        webView = findViewById<WebView>(R.id.web_view_select)
+        webView.loadUrl("https://stackoverflow.com/");
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = (object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                webView.evaluateJavascript("JSON.stringify(\$(\"header\")[0].getBoundingClientRect())",
+                        object : ValueCallback<String> {
+                            override fun onReceiveValue (value: String) {
+                                Toast.makeText(baseContext,value,Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                )
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
