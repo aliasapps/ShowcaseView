@@ -4,7 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Rect
+import android.util.Log
 import android.util.TypedValue
+import android.webkit.ValueCallback
+import android.webkit.WebView
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 /**
  * Created by erkutaras on 25.02.2018.
@@ -33,6 +39,50 @@ class ShowcaseUtils {
         fun isNotZero(f: Float): Boolean {
             return f != 0f
         }
+
+        @JvmStatic
+        fun getWebRect(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
+            var serializedQueries = Gson().toJson(queries);
+            var js: String = "(function(){" +
+                    "var results = [];" +
+                    "for (var query of $serializedQueries) {" +
+                    "console.log(\$(query));" +
+                    "results.push(\$(query)[0].getBoundingClientRect());" +
+                    "}" +
+                    "console.log(JSON.stringify({'rects':results}));" +
+                    "return JSON.stringify({'rects':results});" +
+                    "})()";
+            webView.evaluateJavascript(js,
+                    object : ValueCallback<String> {
+                        override fun onReceiveValue (value: String) {
+                            val rects: ArrayList<Rect> = ArrayList();
+                            val webViewRect = Rect();
+                            webView.getGlobalVisibleRect(webViewRect)
+                            val jsRects = GsonBuilder().setLenient().create().fromJson<JSRectList>(value.substring(1,value.length - 1).replace("\\",""), JSRectList::class.java)
+                            for (jsRect in jsRects.rects) {
+                                val rect = Rect(jsRect.left.toInt(),jsRect.top.toInt(),jsRect.right.toInt(),jsRect.bottom.toInt())
+                                rect.offset(webViewRect.left,webViewRect.top)
+                                rects.add(rect)
+                            }
+                            callback(rects)
+                        }
+                    });
+        }
+    }
+
+    data class JSRectList(
+        var rects: List<JSRect> ) {
+    }
+
+    data class JSRect(
+            var x: Float = 0.0f,
+            var y: Float = 0.0f,
+            var width: Float = 0.0f,
+            var height: Float = 0.0f,
+            var top: Float = 0.0f,
+            var bottom: Float = 0.0f,
+            var left: Float = 0.0f,
+            var right: Float = 0.0f) {
     }
 
     internal class ShowcaseSP @SuppressLint("CommitPrefEdits")

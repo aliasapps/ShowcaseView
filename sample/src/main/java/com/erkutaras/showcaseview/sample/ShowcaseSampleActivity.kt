@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
+import android.icu.util.UniversalTimeScale
 import android.os.Bundle
+import android.util.JsonReader
+import android.util.Log
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
@@ -13,9 +16,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Switch
 import android.widget.Toast
+import androidx.core.graphics.plus
 
 import com.erkutaras.showcaseview.ShowcaseManager
 import com.erkutaras.showcaseview.ShowcaseUtils
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.json.JSONObject
+import java.util.*
 
 /**
  * Created by erkut.aras on 23.02.2018.
@@ -201,6 +209,73 @@ class ShowcaseSampleActivity : AppCompatActivity() {
                 .show()
     }
 
+    private var listener6 = { v: View ->
+        ShowcaseUtils.getWebRect(webView, Arrays.asList("header",".w90")){ rects: List<Rect> ->
+            run {
+                val builder = ShowcaseManager.Builder()
+                builder.context(this@ShowcaseSampleActivity)
+                        .key("TEST")
+                        .developerMode(true)
+                        .rectangle()
+                        .useGravity(true)
+                        .setGravity(Gravity.END)
+                        .view(rects[0])
+                        .descriptionImageRes(R.mipmap.ic_launcher)
+                        .descriptionTitle("LOREM IPSUM DOLOR-1")
+                        .descriptionText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+                        .buttonText("Done")
+                        .cancelButtonColor(Color.RED)
+                        .buttonVisibility(true)//To hide button
+                        .cancelButtonVisibility(true)//To hide cancel button
+                        .moveButtonsVisibility(true)
+                        .add()
+                        .view(rects[1])
+                        .build()
+                        .show()
+            }
+        }
+//        webView.evaluateJavascript("JSON.stringify(\$(\"header\")[0].getBoundingClientRect())",
+//                object : ValueCallback<String> {
+//                    override fun onReceiveValue (value: String) {
+//                        val rect = GsonBuilder().setLenient().create().fromJson<JSRect>(value.substring(1,value.length - 1).replace("\\",""), JSRect::class.java)
+//                        val builder = ShowcaseManager.Builder()
+//                        val baseRect = Rect()
+//                        val divRect = Rect(rect.left,rect.top,rect.right,rect.bottom)
+//                        webView.getGlobalVisibleRect(baseRect)
+//                        divRect.offset(baseRect.left,baseRect.top)
+//                        builder.context(this@ShowcaseSampleActivity)
+//                                .key("TEST")
+//                                .developerMode(true)
+//                                .rectangle()
+//                                .view(divRect)
+//                                .descriptionImageRes(R.mipmap.ic_launcher)
+//                                .descriptionTitle("LOREM IPSUM DOLOR-1")
+//                                .descriptionText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+//                                .buttonText("Done")
+//                                .cancelButtonColor(Color.RED)
+//                                .buttonVisibility(false)//To hide button
+//                                .cancelButtonVisibility(true)//To hide cancel button
+//                                .moveButtonsVisibility(true)
+//                                .add()
+//                                .build()
+//                                .show()
+//                    }
+//                }
+//        )
+
+    }
+
+    data class JSRect(
+            var x: Int = 0,
+            var y: Int = 0,
+            var width: Int = 0,
+            var height: Int = 0,
+            var top: Int = 0,
+            var bottom: Int = 0,
+            var left: Int = 0,
+            var right: Int = 0) {
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_showcase_sample)
@@ -220,18 +295,21 @@ class ShowcaseSampleActivity : AppCompatActivity() {
         webView = findViewById<WebView>(R.id.web_view_select)
         webView.loadUrl("https://stackoverflow.com/");
         webView.settings.javaScriptEnabled = true
-        webView.webViewClient = (object : WebViewClient() {
+        findViewById<View>(R.id.button_webview).setOnClickListener(listener6)
+        webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                webView.evaluateJavascript("JSON.stringify(\$(\"header\")[0].getBoundingClientRect())",
-                        object : ValueCallback<String> {
-                            override fun onReceiveValue (value: String) {
-                                Toast.makeText(baseContext,value,Toast.LENGTH_SHORT).show()
+                ShowcaseUtils.getWebRect(webView, Arrays.asList("header",".w90","#search")) { rects: List<Rect> ->
+                    run {
+                        rects.forEach() { rect: Rect ->
+                            run {
+                                Log.e("RECT", rect.toString());
                             }
                         }
-                )
+                    }
+                }
             }
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
