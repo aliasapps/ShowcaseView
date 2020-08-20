@@ -439,23 +439,26 @@ open class ShowcaseView : RelativeLayout {
             drawFocusArea(shadowPaint, canvas)
         }
 
+        val halfW: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.bottom - rect.top) / 2.toFloat()
+        val halfH: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.right - rect.left) / 2.toFloat()
+
         if (useGravity) {
             when (descriptionGravity) {
                 Gravity.END -> {
-                    xDescView = (cxFocusArea + radiusFocusArea).toInt();
+                    xDescView = (cxFocusArea + halfW ).toInt();
                     yDescView = (cyFocusArea - descriptionView.height / 2).toInt();
                 }
                 Gravity.BOTTOM -> {
                     xDescView = (cxFocusArea - descriptionView.width / 2).toInt();
-                    yDescView = (cyFocusArea + radiusFocusArea + descriptionView.height + FOCUS_AREA_BOTTOM_MARGIN_IN_DP).toInt();
+                    yDescView = (cyFocusArea + halfH + descriptionView.height + FOCUS_AREA_BOTTOM_MARGIN_IN_DP).toInt();
                 }
                 Gravity.START -> {
-                    xDescView = (cxFocusArea - radiusFocusArea - descriptionView.width).toInt();
+                    xDescView = (cxFocusArea - halfW - descriptionView.width).toInt();
                     yDescView = (cyFocusArea - descriptionView.height / 2).toInt();
                 }
                 Gravity.TOP -> {
                     xDescView = (cxFocusArea - descriptionView.width / 2).toInt();
-                    yDescView = (cyFocusArea - radiusFocusArea - descriptionView.height - FOCUS_AREA_TOP_MARGIN_IN_DP).toInt();
+                    yDescView = (cyFocusArea - halfH - descriptionView.height - FOCUS_AREA_TOP_MARGIN_IN_DP).toInt();
                 }
                 else -> throw InvalidParameterException("Invalid gravity type used : $descriptionGravity");
             }
@@ -463,8 +466,8 @@ open class ShowcaseView : RelativeLayout {
             // descriptionView relocate related to focusArea
             val topMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_TOP_MARGIN_IN_DP.toFloat())
             val bottomMarginFocusArea = ShowcaseUtils.convertDpToPx(FOCUS_AREA_BOTTOM_MARGIN_IN_DP.toFloat())
-            val topFocusArea = cyFocusArea - radiusFocusArea
-            val bottomFocusArea = cyFocusArea + radiusFocusArea
+            val topFocusArea = cyFocusArea - halfH
+            val bottomFocusArea = cyFocusArea + halfH
             yDescView = if (topFocusArea >= descriptionView.height + topMarginFocusArea) {
                 (topFocusArea - topMarginFocusArea - descriptionView.height.toFloat()).toInt()
             } else {
