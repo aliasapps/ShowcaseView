@@ -41,7 +41,7 @@ class ShowcaseUtils {
         }
 
         @JvmStatic
-        fun getWebRect(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
+        fun getWebJQueryRects(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
             var serializedQueries = Gson().toJson(queries);
             var js: String = "(function(){" +
                     "var results = [];" +
@@ -52,6 +52,61 @@ class ShowcaseUtils {
                     "console.log(JSON.stringify({'rects':results}));" +
                     "return JSON.stringify({'rects':results});" +
                     "})()";
+            getWebRects(webView,js,callback)
+        }
+
+        @JvmStatic
+        fun getWebIDRects(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
+            var serializedQueries = Gson().toJson(queries);
+            var js: String = "(function(){" +
+                    "var results = [];" +
+                    "for (var query of $serializedQueries) {" +
+                    "console.log(query);" +
+                    "results.push(document.getElementById(query).getBoundingClientRect());" +
+                    "}" +
+                    "console.log(JSON.stringify({'rects':results}));" +
+                    "return JSON.stringify({'rects':results});" +
+                    "})()";
+            getWebRects(webView,js,callback)
+        }
+
+        @JvmStatic
+        fun getWebTagRects(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
+            var serializedQueries = Gson().toJson(queries);
+            var js: String = "(function(){\n" +
+                    "var results = [];\n" +
+                    "for (var query of $serializedQueries) {\n" +
+                    "console.log(query);\n" +
+                    "var divs = document.getElementsByTagName(query);\n" +
+                    "console.log(divs);\n" +
+                    "for (var div of divs)\n" +
+                    "results.push(div.getBoundingClientRect());\n" +
+                    "}\n" +
+                    "console.log(JSON.stringify({'rects':results}));\n" +
+                    "return JSON.stringify({'rects':results});\n" +
+                    "})()\n";
+            getWebRects(webView,js,callback)
+        }
+
+        @JvmStatic
+        fun getWebClassRects(webView: WebView, queries: List<String>, callback: (rects: List<Rect>) -> Unit) {
+            var serializedQueries = Gson().toJson(queries);
+            var js: String = "(function(){\n" +
+                    "var results = [];\n" +
+                    "for (var query of $serializedQueries) {\n" +
+                    "console.log(query);\n" +
+                    "var divs = document.getElementsByClassName(query);\n" +
+                    "for (var div of divs)\n" +
+                    "results.push(div.getBoundingClientRect());\n" +
+                    "}\n" +
+                    "console.log(JSON.stringify({'rects':results}));\n" +
+                    "return JSON.stringify({'rects':results});\n" +
+                    "})()\n";
+            getWebRects(webView,js,callback)
+        }
+
+        @JvmStatic
+        private fun getWebRects(webView: WebView, js: String, callback: (rects: List<Rect>) -> Unit) {
             webView.evaluateJavascript(js,
                     object : ValueCallback<String> {
                         override fun onReceiveValue (value: String) {
@@ -68,6 +123,7 @@ class ShowcaseUtils {
                         }
                     });
         }
+
     }
 
     data class JSRectList(

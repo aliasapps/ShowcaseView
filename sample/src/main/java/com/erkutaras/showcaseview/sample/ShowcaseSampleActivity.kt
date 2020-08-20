@@ -4,25 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
-import android.icu.util.UniversalTimeScale
 import android.os.Bundle
-import android.util.JsonReader
 import android.util.Log
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Switch
 import android.widget.Toast
-import androidx.core.graphics.plus
 
 import com.erkutaras.showcaseview.ShowcaseManager
 import com.erkutaras.showcaseview.ShowcaseUtils
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import org.json.JSONObject
 import java.util.*
 
 /**
@@ -210,8 +203,8 @@ class ShowcaseSampleActivity : AppCompatActivity() {
     }
 
     private var listener6 = { v: View ->
-        ShowcaseUtils.getWebRect(webView, Arrays.asList("header",".w90")){ rects: List<Rect> ->
-            run {
+        ShowcaseUtils.getWebTagRects(webView, Arrays.asList("div")){ rects: List<Rect> ->
+                run {
                 val builder = ShowcaseManager.Builder()
                 builder.context(this@ShowcaseSampleActivity)
                         .key("TEST")
@@ -226,10 +219,11 @@ class ShowcaseSampleActivity : AppCompatActivity() {
                         .buttonText("Done")
                         .cancelButtonColor(Color.RED)
                         .buttonVisibility(true)//To hide button
-                        .cancelButtonVisibility(true)//To hide cancel button
+                        .cancelButtonVisibility(true)
                         .moveButtonsVisibility(true)
                         .add()
                         .view(rects[1])
+                        .add()
                         .build()
                         .show()
             }
@@ -293,23 +287,23 @@ class ShowcaseSampleActivity : AppCompatActivity() {
         v2.setOnClickListener(listener5)
 
         webView = findViewById<WebView>(R.id.web_view_select)
-        webView.loadUrl("https://stackoverflow.com/");
+        webView.loadUrl("https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default");
         webView.settings.javaScriptEnabled = true
         findViewById<View>(R.id.button_webview).setOnClickListener(listener6)
-        webView.webViewClient = object: WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                ShowcaseUtils.getWebRect(webView, Arrays.asList("header",".w90","#search")) { rects: List<Rect> ->
-                    run {
-                        rects.forEach() { rect: Rect ->
-                            run {
-                                Log.e("RECT", rect.toString());
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        webView.webViewClient = object: WebViewClient() {
+//            override fun onPageFinished(view: WebView?, url: String?) {
+//                super.onPageFinished(view, url)
+//                ShowcaseUtils.getWebJQueryRects(webView, Arrays.asList("header",".w90","#search")) { rects: List<Rect> ->
+//                    run {
+//                        rects.forEach() { rect: Rect ->
+//                            run {
+//                                Log.e("RECT", rect.toString());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
