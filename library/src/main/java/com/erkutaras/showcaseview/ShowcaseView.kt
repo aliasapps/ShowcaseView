@@ -439,8 +439,8 @@ open class ShowcaseView : RelativeLayout {
             drawFocusArea(shadowPaint, canvas)
         }
 
-        val halfW: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.bottom - rect.top) / 2.toFloat()
-        val halfH: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.right - rect.left) / 2.toFloat()
+        val halfH: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.bottom - rect.top) / 2.toFloat()
+        val halfW: Float = if (type == ShowcaseType.CIRCLE) radiusFocusArea else (rect.right - rect.left) / 2.toFloat()
 
         if (useGravity) {
             when (descriptionGravity) {
