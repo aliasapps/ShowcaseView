@@ -14,7 +14,7 @@ Additionally, more utilty functions were added to ShowcaseUtils utils to allow i
 
 | Usage                                | Description                                                                           |
 | ------------------------------------ |-------------------------------------------------------------------------------------- |
-| `ShowcaseUtils.getWebJQueryRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of JQuery jquery strings and returns a list of rectangles containing the first result which was returned for each query |
+| `ShowcaseUtils.getWebJQueryRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of JQuery strings and returns a list of rectangles containing the first result which was returned for each query |
 | `ShowcaseUtils.getWebIDRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML element id attributes and returns a list of rectangles which correspond to each id |
 | `ShowcaseUtils.getWebTagRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML element tags and returns a list of rectangles which correspond to **every** element that has the corresponding tag |
 | `ShowcaseUtils.getWebClassRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML class attributes and returns a list of rectangles which correspond to **every** element that has the corresponding class |
