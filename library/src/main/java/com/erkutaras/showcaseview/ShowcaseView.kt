@@ -473,6 +473,7 @@ open class ShowcaseView : RelativeLayout {
             } else {
                 (bottomFocusArea + bottomMarginFocusArea).toInt()
             }
+            xDescView = (cxFocusArea - halfW).toInt()
         }
 
         descriptionView.x = xDescView.toFloat() + descriptionDeltaX
