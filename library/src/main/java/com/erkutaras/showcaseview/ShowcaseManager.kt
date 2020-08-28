@@ -112,12 +112,6 @@ class ShowcaseManager private constructor(private val builder: Builder) {
         private var descriptionGravity: Int = Gravity.RIGHT
         private var useGravity: Boolean = false
         private var useFocus: Boolean = true
-//        private var useViewAsFocus: Boolean = true
-//        private var  centerX: Float = 0.0f
-//        private var  centerY: Float = 0.0f
-//        private var  circleCenterRadius: Float = 0.0f
-//        private var  rectWidth: Float = 0.0f
-//        private var  rectHeight: Float = 0.0f
         private var descriptionDeltaX: Float = 0.0f
         private var descriptionDeltaY: Float = 0.0f
 
@@ -279,36 +273,6 @@ class ShowcaseManager private constructor(private val builder: Builder) {
             this.useFocus = enabled
             return this;
         }
-
-//        fun useViewAsFocus(enabled: Boolean): Builder {
-//            this.useViewAsFocus = enabled
-//            return this;
-//        }
-//
-//        fun circleCenterX(x: Float): Builder {
-//            this.centerX = x
-//            return this
-//        }
-//
-//        fun circleCenterY(y: Float): Builder {
-//            this.centerY = y
-//            return this
-//        }
-//
-//        fun circleCenterRadius(radius: Float): Builder {
-//            this.circleCenterRadius = radius
-//            return this
-//        }
-//
-//        fun rectWidth(width: Float): Builder {
-//            this.rectWidth = width
-//            return this
-//        }
-//
-//        fun rectHeight(height: Float): Builder {
-//            this.rectHeight = height
-//            return this
-//        }
 
         fun descriptionDeltaX(x: Float): Builder {
             this.descriptionDeltaX = x

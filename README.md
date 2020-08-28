@@ -1,10 +1,49 @@
 # Android ShowcaseView
 ### (forked from https://github.com/erkutaras/ShowcaseView)
-Changes made
-| Usage                                | Description                                                                           |
+Changes made to ShowcaseManager.Builder
+| Usage                                | Description                                                                            |
 | ------------------------------------ |-------------------------------------------------------------------------------------- |
 | `builder.useGravity(boolean)`        |  Use gravity instead of automatically positioning the showcase description            |
 | `builder.setGravity(int)`            | Set the gravity, must be from Gravity.START,Gravity.END,Gravity.TOP,Gravity.BOTTOM    |
+| `builder.view(Rect)`            | Set the focus area to the Rect, where rect represents an on screen rectangle with units in pixels |
+| `builder.useFocus(boolean)`            | Toggles the focus area so that the whole screen can be dimmed instead of focusing on a certain element |
+| `builder.descriptionDeltaX(float)`            | Set a number of pixels by which the description x coordinate is offset by.  Useful for positioning the description in a specific location |
+| `builder.descriptionDeltaY(float)`            | Set a number of pixels by which the description y coordinate is offset by.  Useful for positioning the description in a specific location |
+
+Additionally, more utilty functions were added to ShowcaseUtils utils to allow interaction with WebViews.  Since this requires asynchrounous javascript evaluation these functions are seperated from the ShowcaseManager and are meant to be called before creating a ShowcaseManager.Builder.  Examples are provided below.
+
+| Usage                                | Description                                                                           |
+| ------------------------------------ |-------------------------------------------------------------------------------------- |
+| `ShowcaseUtils.getWebJQueryRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of JQuery jquery strings and returns a list of rectangles containing the first result which was returned for each query |
+| `ShowcaseUtils.getWebIDRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML element id attributes and returns a list of rectangles which correspond to each id |
+| `ShowcaseUtils.getWebTagRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML element tags and returns a list of rectangles which correspond to **every** element that has the corresponding tag |
+| `ShowcaseUtils.getWebClassRects(WebView,List<String>,(List<Rect>) -> Unit)` | Takes a list of HTML class attributes and returns a list of rectangles which correspond to **every** element that has the corresponding class |
+
+Example of using web rectangle utility which would return the rectangle of every div element in the webview and then displays a showcase for the first rectangle returned.
+
+```koltin
+        ShowcaseUtils.getWebTagRects(webView, Arrays.asList("div")){ rects: List<Rect> ->
+                run {
+                val builder = ShowcaseManager.Builder()
+                builder.context(this@ShowcaseSampleActivity)
+                        .key("TEST")
+                        .developerMode(true)
+                        .rectangle()
+                        .view(rects[0])
+                        .descriptionImageRes(R.mipmap.ic_launcher)
+                        .descriptionTitle("LOREM IPSUM DOLOR-1")
+                        .descriptionText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+                        .buttonText("Done")
+                        .cancelButtonColor(Color.RED)
+                        .buttonVisibility(true)
+                        .cancelButtonVisibility(true)
+                        .moveButtonsVisibility(true)
+                        .add()
+                        .build()
+                        .show()
+            }
+        }
+```
 
 ---
 [![](https://jitpack.io/v/erkutaras/ShowcaseView.svg)](https://jitpack.io/#erkutaras/ShowcaseView)
