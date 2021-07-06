@@ -445,8 +445,8 @@ open class ShowcaseView : RelativeLayout {
         if (useGravity) {
             when (descriptionGravity) {
                 Gravity.END -> {
-                    xDescView = (cxFocusArea + halfW ).toInt();
-                    yDescView = (cyFocusArea - descriptionView.height / 2).toInt();
+                    xDescView = 0;
+                    yDescView = 0;
                 }
                 Gravity.BOTTOM -> {
                     xDescView = (cxFocusArea - descriptionView.width / 2).toInt();
